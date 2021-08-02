@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use File;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Author;
@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    
     // ########## -LOGIN- #########
     public function login(){
         return view('auth.login');
@@ -58,6 +59,8 @@ class AuthController extends Controller
         $author->password = Hash::make($request->adminPassword);
         $author->numberOfBooks = 0;
         if($author->save()){
+            //mkdir('books/'.$request->adminEmail);
+            File::makeDirectory('books/'.$request->adminEmail);
             return redirect(route('auth.login'))->with('authorSuccess','You signed up as author successfully');
         }else{
             return back()->with('authorFail','Something went wrong, try again');
@@ -82,7 +85,16 @@ class AuthController extends Controller
         }
     }
 
+    public function logout(){
+        if(session()->has('LoggedAuthor')){
+            session()->pull('LoggedAuthor');
+            return redirect('auth/login');
+        }
+        
+    }
+
     public function dashboard(){
-        return view('author.dashboard');
+        $user = ["user" => Author::where('id','=',session('LoggedAuthor'))->first(), "isAdmin" => 1];
+        return view('author.dashboard', $user);
     }
 }

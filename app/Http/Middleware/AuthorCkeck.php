@@ -16,6 +16,16 @@ class AuthorCkeck
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request);
+        if((!session()->has('LoggedAuthor')) && (($request->path() != 'auth/login') && ($request->path() != 'auth/register'))){
+            
+            return redirect('/auth/login');
+        }
+
+        if(session()->has('LoggedAuthor') && ($request->path() == '/auth/login' || $request->path() == '/auth/register')){
+            return back();
+        }
+        return $next($request)->header('Cache-Control','no-cache, no-store, max-age=0, must-revalidate')
+                              ->header('Pragma','no-cache')
+                              ->header('Expires','Sat 01 Jan');;
     }
 }

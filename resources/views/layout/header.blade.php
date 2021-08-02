@@ -10,7 +10,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Navbar w/ text</a>
+          <a class="navbar-brand" href="#">E-bibliotheque</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -19,15 +19,19 @@
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="#">Home</a>
               </li>
+              @if ($isAdmin == 1)
               <li class="nav-item">
-                <a class="nav-link" href="#">Features</a>
+                <a class="nav-link" href="/admin/add-books">Add a book</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Pricing</a>
-              </li>
+              @endif
+              
+              
             </ul>
+            <span class="navbar-text" style="margin-right: 25px">
+                {{ $user->first()->name }}
+            </span>
             <span class="navbar-text">
-              Navbar text with an inline element
+                <a href="/auth/logout">Logout</a>
             </span>
           </div>
         </div>
